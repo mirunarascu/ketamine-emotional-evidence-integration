@@ -1,0 +1,69 @@
+# Analysis settings used in the manuscript.
+
+# Settings that differ between the two samples
+cohorts:
+  in_person:
+    has_drug: true
+    buffer_frames: 60        # 1 s
+  online:
+    has_drug: false
+    buffer_frames: 30        # 0.5 s, responses started earlier online (Fig S1A)
+
+frame_rate_hz: 60
+
+coding:
+  condID: {1: valence, 2: arousal}
+  stabID: {1: stable, 2: volatile}
+  drug: {1: placebo, 2: ketamine}
+
+# Emotion levels of the true mean (valence 2-6, arousal 2/4/6).
+emotion_levels:
+  valence: {negative: [2, 3], neutral: [4], positive: [5, 6]}
+  arousal: {low: [2], medium: [4], high: [6]}
+
+# Rating error = rating - true mean. For the comparison of the two extremes the sign is
+# flipped for positive valence and high arousal, so that positive values mean
+# "less extreme than the true mean" (towards the centre of the scale) at both ends.
+rating_error_flip: [positive, high]
+
+change_points:
+  # A response counts from cp + buffer until the earliest of: the next cp + buffer,
+  # cp + max_window_frames (7 s), or the end of the block.
+  # buffer_frames is set per cohort under cohorts: above (1 s in person, 0.5 s online).
+  max_window_frames: 420
+  # Change points whose window is shorter than this are not analysed.
+  min_window_s: 1.0
+  # Exclude the change point whose window is interrupted by the mid-block
+  # confidence question (responses after the pause can't be attributed to it).
+  exclude_probe_interrupted: true
+
+# Detection curves (Fig 2A, S1A, S3E): proportion of change points detected by each time
+# after the change point (Kaplan-Meier, a change point that ends without a correct response
+# counts as censored). Responses count from the change point itself (no buffer) until the
+# next change point, the mid-block question or the block end.
+detection_curve:
+  max_time_s: 7
+  min_subjects: 10          # times with fewer participants contributing are not drawn
+
+null_model:
+  n_shuffles: 1000
+  seed: 42
+
+kernels:
+  n_regressors: 5
+  # Face-wise linear kernel (main analysis): rating changes regressed on the prediction
+  # errors of the 5 faces before each change.
+  facewise:
+    merge_frames: 40          # rating steps closer than this (667 ms) form one rating change
+    nondecision_frames: 12    # evidence in the 200 ms before a change is not used
+    min_face_frames: 13       # faces with less usable time than this are skipped
+  # Time-binned logistic kernel (preregistered, Fig S4): does a rating change start after a
+  # face onset, given the mean prediction error in 5 bins before the onset?
+  timebinned:
+    bin_width_frames: 30      # 500 ms per bin (preregistered)
+    movement_window_frames: 43
+    merge_frames: 40
+
+# Figures (display only, does not change any result)
+figures:
+  formats: [png]              # add svg for editable vector files, e.g. [png, svg]

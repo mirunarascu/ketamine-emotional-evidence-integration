@@ -1,0 +1,18 @@
+# data and results are not kept in git (data: see data/README.md)
+data/*
+# KDEF-dyn images cannot be redistributed (make them with task/make_kdef_frames.py)
+kdef-dyn/
+output/
+
+.DS_Store
+__pycache__/
+*.pyc
+.Rhistory
+.RData
+
+# files PsychoPy writes when the task is run or compiled locally
+*_lastrun.py
+task/**/log/
+
+# task code: not shared yet (to be added)
+task/*

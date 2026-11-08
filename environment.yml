@@ -1,0 +1,24 @@
+# Software needed to run the analysis code (Python and R in one environment).
+#
+#   conda env create -f environment.yml      # once (or: mamba env create -f environment.yml)
+#   conda activate peduks-analysis           # every time, before running the scripts
+#
+# Versions are the ones used for the paper.
+name: peduks-analysis
+channels:
+  - conda-forge
+dependencies:
+  - python=3.11
+  - pandas=2.3.3
+  - numpy=2.4.6
+  - scipy=1.17.1
+  - statsmodels=0.15.0
+  - matplotlib=3.11.1
+  - pyyaml=6.0.3
+  - r-base=4.5
+  - r-matrix=1.7.5
+  - r-lme4=2.0.6
+  - r-lmertest=3.2.1
+  - r-pbkrtest=0.5.5
+  - r-emmeans=2.0.4
+  - r-yaml=2.3.12
